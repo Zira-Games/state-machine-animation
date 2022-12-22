@@ -138,15 +138,15 @@ class Transition extends Equatable {
 
   Transition.defaultTransition(this.from, this.to)
       : identifier = "($from:$to)",
-        defaultKeyframes = <AnimationKeyframe>[AnimationKeyframe(from.toString(), 0), AnimationKeyframe(to.toString(), 1)];
+        defaultKeyframes = <AnimationKeyframe>[AnimationKeyframe(from, 0), AnimationKeyframe(to, 1)];
 
   Transition.declared({required this.identifier, required this.from, required this.to, List<AnimationKeyframe> defaultInternalKeyframes = const []})
-      : defaultKeyframes = <AnimationKeyframe>[AnimationKeyframe(from.fromKey, 0), ...defaultInternalKeyframes, AnimationKeyframe(to.toString(), 1)];
+      : defaultKeyframes = <AnimationKeyframe>[AnimationKeyframe(from, 0), ...defaultInternalKeyframes, AnimationKeyframe(to, 1)];
 
   @override List<Object?> get props => [identifier, from, to, defaultKeyframes];
 
   Transition reverse() =>
-      Transition("(${to.toKey}:${from.fromKey})", to, from, defaultKeyframes.reversed.map((k) => AnimationKeyframe(k.key, 1 - k.progress)).toList());
+      Transition("(${to.toKey}:${from.fromKey})", to, from, defaultKeyframes.reversed.map((k) => AnimationKeyframe(k.keyState, 1 - k.progress)).toList());
   Transition tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) =>
       Transition(identifier, from.tick(sourceState, config, elapsed), to.tick(sourceState, config, elapsed), defaultKeyframes);
   Transition checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) =>

@@ -3,9 +3,9 @@
 /// More dartdocs go here.
 library state_machine_animation;
 
-export 'src/fsm/animation_fsm.dart';
-export 'src/fsm/animation_keyframe.dart';
-export 'src/fsm/animation_state.dart';
+export 'src/state_machine/animation_state_machine.dart';
+export 'src/state_machine/animation_keyframe.dart';
+export 'src/state_machine/animation_state.dart';
 export 'src/property/animation_property.dart';
 export 'src/property/animation_property_state.dart';
 export 'src/container/animation_model.dart';

@@ -10,7 +10,7 @@ typedef IdleOnFilter = bool Function(String key);
 
 // TODO maybe instead of a stream output use: extends Animation<double> with AnimationEagerListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin so that it's in line with regular AnimationController
 // TODO maybe instead of an abstract class with inheritance, do it with composition and declaratively
-abstract class AnimationFSM<S> {
+abstract class AnimationStateMachine<S> {
 
   final TickerManager tickerManager;
   final BehaviorSubject<S> input;
@@ -25,7 +25,7 @@ abstract class AnimationFSM<S> {
   AnimationStateMachineConfig<S> getConfig(S state);
   void listenForStateChanges(S state, S? previous);
 
-  AnimationFSM(this.input, this.tickerManager) {
+  AnimationStateMachine(this.input, this.tickerManager) {
     _ticker = tickerManager.createTicker(_onTicked);
     _inputSubscription = input.listen(_onSourceEvent);
     _tickerChangeSubscription = output.map((state) => state?.state.isChanging ?? false).distinct().listen(_onTickerChange);
@@ -101,7 +101,7 @@ abstract class AnimationFSM<S> {
         _add(current.copyWith(state: currentState.play()));
         return;
       } else if ( currentState.transition.from == targetState ) {
-        _add(current.copyWith(state: currentState.reverse<S>(current.sourceState, current.config)));
+        _add(current.copyWith(state: currentState.reverse<S>(current.sourceState, current.config).play()));
         return;
       }
       var newCurrent = currentState.checkProgress<S>(current.sourceState, current.config);

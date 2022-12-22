@@ -9,15 +9,15 @@ import 'package:rxdart/rxdart.dart';
 
 import '../container/animation_container.dart';
 import '../container/animation_model.dart';
-import '../fsm/animation_state.dart';
-import '../fsm/animation_keyframe.dart';
+import '../state_machine/animation_state.dart';
+import '../state_machine/animation_keyframe.dart';
 import '../util/cache.dart';
 import 'animation_property_state.dart';
 import 'property_timeline.dart';
 
 typedef PropertyAnimation<T> = BehaviorSubject<AnimationPropertyState<T>>;
 
-typedef KeyEvaluatorFunction<T,S> = T Function(String key, S sourceState);
+typedef KeyEvaluatorFunction<T,S> = T? Function(String key, S sourceState);
 typedef InterpolatorFunction<T> = T Function(T from, T to, double progress);
 typedef StateEvaluator<T, S> = T Function(String fromKey, String toKey, double progress, S sourceState);
 typedef Serializer = Map<String, dynamic> Function(AnimationPropertyState state);
@@ -84,7 +84,7 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
 
   T _tryEvaluateIdle(Idle idle, S sourceState){
     try {
-      return keyEvaluator!(idle.node, sourceState);
+      return keyEvaluator!(idle.node, sourceState) ?? initialValue;
     } catch (e, s) {
       if (kDebugMode) {
         print("COULDN'T EVALUATE KEY ${idle.node} for property $name");

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../fsm/animation_state.dart';
+import '../state_machine/animation_state.dart';
 import 'animation_property.dart';
 
 class AnimationPropertyState<T extends dynamic> extends Equatable {

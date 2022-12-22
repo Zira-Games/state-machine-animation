@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import "package:belatuk_merge_map/belatuk_merge_map.dart";
 
-import '../fsm/animation_fsm.dart';
-import '../fsm/animation_state.dart';
+import '../state_machine/animation_state_machine.dart';
+import '../state_machine/animation_state.dart';
 import '../property/animation_property.dart';
 import '../property/animation_property_state.dart';
 import 'animation_model.dart';
@@ -17,7 +17,7 @@ typedef ContainerSerializer<S> = Map<String, dynamic> Function(S state);
 // TODO https://github.com/flutter/flutter/issues/93584
 class AnimationContainer<S, M extends AnimationModel> {
 
-  final AnimationFSM<S> fsm;
+  final AnimationStateMachine<S> fsm;
   late final List<AnimationProperty<dynamic, S>> properties;
   late final List<PropertyAnimation> _animations;
 

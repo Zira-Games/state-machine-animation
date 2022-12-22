@@ -5,7 +5,7 @@ import 'package:memoized/memoized.dart';
 import 'package:state_machine_animation/src/util/bisect.dart';
 
 import '../container/animation_container.dart';
-import '../fsm/animation_state.dart';
+import '../state_machine/animation_state.dart';
 import 'animation_property.dart';
 
 class PropertyTimeline<P extends AnimationProperty<T, S>, T, S> {
@@ -33,17 +33,14 @@ class PropertyTimeline<P extends AnimationProperty<T, S>, T, S> {
         } else if( nearEqual(1, inTransition.progress, 1e-3) ){
           return property.getValue(inTransition.transition.to, sourceState, config);
         } else {
-          return property.getValue(Idle(keyframe.key), sourceState, config);
+          return property.getValue(keyframe.keyState, sourceState, config);
         }
       }
       final index = transition.defaultKeyframes.map((e) => e.progress).toList().bisect(inTransition.progress);
       final fromKeyframe = transition.defaultKeyframes[index - 1];
-      // TODO don't depend on string for comparison
-      final fromState = inTransition.transition.from.toString() == fromKeyframe.key ? inTransition.transition.from : Idle(fromKeyframe.key);
-      final fromValue = property.getValue(fromState, sourceState, config);
+      final fromValue = property.getValue(fromKeyframe.keyState, sourceState, config);
       final toKeyframe = transition.defaultKeyframes[index];
-      final toState = inTransition.transition.to.toString() == toKeyframe.key ? inTransition.transition.to : Idle(toKeyframe.key);
-      final toValue = property.getValue(toState, sourceState, config);
+      final toValue = property.getValue(toKeyframe.keyState, sourceState, config);
 
       final sectionProgress = inTransition.progress - fromKeyframe.progress;
       final sectionProgressInterval = toKeyframe.progress - fromKeyframe.progress;

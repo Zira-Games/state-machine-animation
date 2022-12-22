@@ -47,7 +47,7 @@ class AppState extends Equatable {
 
 }
 
-class ExampleAFSM extends AnimationFSM<AppState> {
+class ExampleAFSM extends AnimationStateMachine<AppState> {
 
   ExampleAFSM(super.input, super.tickerManager);
 
