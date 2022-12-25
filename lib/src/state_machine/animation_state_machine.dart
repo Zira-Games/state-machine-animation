@@ -8,13 +8,13 @@ import 'animation_state.dart';
 
 typedef IdleOnFilter = bool Function(String key);
 
-// TODO maybe instead of a stream output use: extends Animation<double> with AnimationEagerListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin so that it's in line with regular AnimationController
+// TODO maybe instead of a stream output, use extends Animation<T> with AnimationEagerListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin so that it's in line with regular AnimationController
 // TODO maybe instead of an abstract class with inheritance, do it with composition and declaratively
 abstract class AnimationStateMachine<S> {
 
   final TickerManager tickerManager;
   final BehaviorSubject<S> input;
-  final BehaviorSubject<AnimationStateMachineValue<S>?> output = BehaviorSubject<AnimationStateMachineValue<S>?>.seeded(null);
+  late final BehaviorSubject<AnimationStateMachineValue<S>?> output;
   late final Ticker _ticker;
   late final StreamSubscription _inputSubscription;
   late final StreamSubscription _tickerChangeSubscription;
@@ -23,9 +23,10 @@ abstract class AnimationStateMachine<S> {
   int _elapsed = 0;
   bool isReady(S state);
   AnimationStateMachineConfig<S> getConfig(S state);
-  void listenForStateChanges(S state, S? previous);
+  void reactToStateChanges(S state, S? previous);
 
-  AnimationStateMachine(this.input, this.tickerManager) {
+  AnimationStateMachine(this.input, this.tickerManager, { bool sync = false }) {
+    output = BehaviorSubject<AnimationStateMachineValue<S>?>.seeded(null, sync: sync);
     _ticker = tickerManager.createTicker(_onTicked);
     _inputSubscription = input.listen(_onSourceEvent);
     _tickerChangeSubscription = output.map((state) => state?.state.isChanging ?? false).distinct().listen(_onTickerChange);
@@ -41,7 +42,7 @@ abstract class AnimationStateMachine<S> {
   _onSourceEvent(S state) {
     if( isReady(state) ){
       _updateConfig(state, getConfig(state));
-      listenForStateChanges(state, value?.sourceState);
+      reactToStateChanges(state, value?.sourceState);
     } else {
       _add(null);
     }

@@ -1,4 +1,8 @@
-## 1.0.1
+## 1.0.2
+
+- Some concepts renamed for better consistency.
+
+## 1.0.1N
 
 - Keyframes now use states as keys instead of strings.
 - fsm renamed to state machine

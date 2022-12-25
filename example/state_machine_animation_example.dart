@@ -6,6 +6,7 @@ import 'package:state_machine_animation/state_machine_animation.dart';
 void main() {
 
   final AppTickerManager tickerManager = AppTickerManager();
+
   final BehaviorSubject<AppState> stateSubject = BehaviorSubject<AppState>.seeded(AppState(Position.center));
 
   final ExampleAFSM stateMachine = ExampleAFSM(stateSubject, tickerManager);
@@ -62,7 +63,7 @@ class ExampleAFSM extends AnimationStateMachine<AppState> {
   );
 
   @override
-  void listenForStateChanges(state, previous) {
+  void reactToStateChanges(state, previous) {
     transitionTo(Idle(state.position.name.toUpperCase()));
   }
 

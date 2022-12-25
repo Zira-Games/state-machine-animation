@@ -28,14 +28,9 @@ class PropertyTimeline<P extends AnimationProperty<T, S>, T, S> {
     try{
       if( transition.defaultKeyframes.any((k) => nearEqual(k.progress, inTransition.progress, 1e-3)) ){
         final keyframe = transition.defaultKeyframes.singleWhere((k) => nearEqual(k.progress, inTransition.progress, 1e-3));
-        if( nearEqual(0, inTransition.progress, 1e-3) ){
-          return property.getValue(inTransition.transition.from, sourceState, config);
-        } else if( nearEqual(1, inTransition.progress, 1e-3) ){
-          return property.getValue(inTransition.transition.to, sourceState, config);
-        } else {
-          return property.getValue(keyframe.keyState, sourceState, config);
-        }
+        return property.getValue(keyframe.keyState, sourceState, config);
       }
+
       final index = transition.defaultKeyframes.map((e) => e.progress).toList().bisect(inTransition.progress);
       final fromKeyframe = transition.defaultKeyframes[index - 1];
       final fromValue = property.getValue(fromKeyframe.keyState, sourceState, config);
@@ -53,7 +48,7 @@ class PropertyTimeline<P extends AnimationProperty<T, S>, T, S> {
         print("INTERPOLATION ERROR: [${transition.defaultKeyframes} ${inTransition.progress}");
         print("$e, $s");
       }
-      return property.getValue(Idle(transition.from.toString()), sourceState, config);
+      return property.getValue(transition.from, sourceState, config);
     }
   }
 

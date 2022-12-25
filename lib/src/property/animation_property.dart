@@ -19,7 +19,7 @@ typedef PropertyAnimation<T> = BehaviorSubject<AnimationPropertyState<T>>;
 
 typedef KeyEvaluatorFunction<T,S> = T? Function(String key, S sourceState);
 typedef InterpolatorFunction<T> = T Function(T from, T to, double progress);
-typedef StateEvaluator<T, S> = T Function(String fromKey, String toKey, double progress, S sourceState);
+typedef StateEvaluator<T, S> = T Function(AnimationState from, AnimationState to, double progress, S sourceState);
 typedef Serializer = Map<String, dynamic> Function(AnimationPropertyState state);
 typedef CurveEvaluator<S> = Curve? Function(Transition transition);
 typedef KeyframeEvaluator<S> = List<AnimationKeyframe>? Function(Transition transition, S sourceState);
@@ -73,16 +73,16 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
     if( cached != null ){
       return cached;
     } else if( state is Idle ){
-      final value = _tryEvaluateIdle(state, sourceState);
+      final value = _tryIdleValue(state, sourceState);
       return shouldCache ? _stateValueCache.set(state, value) : value;
     } else if( state is InTransition ) {
-      var value = _getInTransitionValue(state, sourceState, config);
+      final value = _getInTransitionValue(state, sourceState, config);
       return shouldCache ? _stateValueCache.set(state, value) : value;
     }
     return initialValue;
   }
 
-  T _tryEvaluateIdle(Idle idle, S sourceState){
+  T _tryIdleValue(Idle idle, S sourceState){
     try {
       return keyEvaluator!(idle.node, sourceState) ?? initialValue;
     } catch (e, s) {
@@ -96,10 +96,10 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
 
   T _getInTransitionValue(InTransition inTransition, S sourceState, AnimationStateMachineConfig config) {
     if( keyEvaluator != null ){
-      var propertyTimeline = getTimeline(container, inTransition.transition, sourceState);
+      final propertyTimeline = getTimeline(container, inTransition.transition, sourceState);
       return propertyTimeline.interpolate(inTransition, sourceState, config);
     } else {
-      return stateEvaluator!(inTransition.transition.from.toString(), inTransition.transition.to.toString(), inTransition.progress, sourceState);
+      return stateEvaluator!(inTransition.transition.from, inTransition.transition.to, inTransition.progress, sourceState);
     }
   }
 
@@ -111,7 +111,7 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
       }
       final reverseKeyframes = evaluateKeyframes!(transition.reverse(), sourceState);
       if( reverseKeyframes != null){
-        return PropertyTimeline<AnimationProperty<T, S>, T, S>(container, this, transition.reverse().copyWith(defaultKeyframes: reverseKeyframes));
+        return PropertyTimeline<AnimationProperty<T, S>, T, S>(container, this, transition.reverse().copyWith(defaultKeyframes: reverseKeyframes.reversed.toList()));
       }
     }
     return PropertyTimeline<AnimationProperty<T, S>, T, S>(container, this, transition);

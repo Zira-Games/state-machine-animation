@@ -1,6 +1,6 @@
 name: state_machine_animation
 description: State-machine driven animation controller and evaluation library based on streams.
-version: 1.0.1
+version: 1.0.2
 repository: https://github.com/Zira-Games/state-machine-animation
 homepage: https://github.com/Zira-Games/state-machine-animation
 
