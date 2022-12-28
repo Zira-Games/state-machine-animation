@@ -9,18 +9,18 @@ void main() {
 
   final BehaviorSubject<AppState> stateSubject = BehaviorSubject<AppState>.seeded(AppState(Position.center));
 
-  final ExampleAFSM stateMachine = ExampleAFSM(stateSubject, tickerManager);
+  final ExampleSM stateMachine = ExampleSM(stateSubject, tickerManager);
 
   final animation = DoubleAnimationProperty<AppState>(
-      keyEvaluator: (key, sourceState) {
-        if( key == "LEFT" ){
-          return -100;
-        } else if( key == "CENTER" ){
-          return 0;
-        } else {
-          return -100;
-        }
+    keyEvaluator: (key, sourceState) {
+      if( key == "LEFT" ){
+        return -100;
+      } else if( key == "CENTER" ){
+        return 0;
+      } else if( key == "RIGHT" ){
+        return -100;
       }
+    }
   ).getAnimation(stateMachine.output);
 
   animation.listen((animationProperty) {
@@ -48,15 +48,15 @@ class AppState extends Equatable {
 
 }
 
-class ExampleAFSM extends AnimationStateMachine<AppState> {
+class ExampleSM extends AnimationStateMachine<AppState> {
 
-  ExampleAFSM(super.input, super.tickerManager);
+  ExampleSM(super.input, super.tickerManager);
 
   @override
   bool isReady(state) => true;
 
   @override
-  AnimationStateMachineConfig<AppState> getConfig(state) => AnimationStateMachineConfig(
+  AnimationStateMachineConfig<AppState> getConfig(state) => const AnimationStateMachineConfig(
       nodes: ["LEFT", "CENTER", "RIGHT"],
       initialState: Idle("CENTER"),
       defaultDuration: 1000

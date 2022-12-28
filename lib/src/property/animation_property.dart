@@ -73,7 +73,7 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
     if( cached != null ){
       return cached;
     } else if( state is Idle ){
-      final value = _tryIdleValue(state, sourceState);
+      final value = _getIdleValue(state, sourceState);
       return shouldCache ? _stateValueCache.set(state, value) : value;
     } else if( state is InTransition ) {
       final value = _getInTransitionValue(state, sourceState, config);
@@ -82,7 +82,7 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
     return initialValue;
   }
 
-  T _tryIdleValue(Idle idle, S sourceState){
+  T _getIdleValue(Idle idle, S sourceState){
     try {
       return keyEvaluator!(idle.node, sourceState) ?? initialValue;
     } catch (e, s) {
