@@ -36,6 +36,7 @@ class AnimationProperty<T extends dynamic, S> extends Equatable {
   final InterpolatorFunction<T>? interpolator;
   final Curve? defaultCurve;
   final CurveEvaluator<S>? _evaluateCurve;
+  // TODO change the implementation so the returned keyframes are only internal, and edges excluded
   final KeyframeEvaluator<S>? evaluateKeyframes;
   CurveEvaluator<S> get evaluateCurve => _evaluateCurve ?? (Transition transition) => defaultCurve;
   final Serializer? _serializer;

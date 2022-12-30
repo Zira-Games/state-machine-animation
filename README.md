@@ -10,7 +10,7 @@ While the current best practice is to let dedicated animation runtimes like rive
 
 The library aims to provide;
 * the simplest possible surface API that you can achieve almost most behaviours with readability, clarity and maintainability with the exact right mix of declarative and imperative programming approaches.
-* the simplest possible implementation that can let its users easily understand the code, fork the repository, and adapt it based on their unique requirements.
+* the simplest possible implementation that can let its users easily understand its codebase, fork the repository, and adapt it based on their unique requirements.
 
 Therefor, delay the need for animation runtimes until you need features like animation rigging and meshing that requires a dedicated user interfaces to implement, and limit their use to only those features.
 
@@ -283,32 +283,69 @@ Example:
 
 ### Animation Property Usage
 
-...
+When a state machine is meant to govern a single property, you should use `AnimationProperty<T, S>` class or one of its extensions as a shortcut.
 
+Animation properties instances are responsible for evaluating the state machine into a resulting value through keyframes and interpolation, along with determining the curve a transition is going to be interpreted with for that property.
+
+##### `DoubleAnimationProperty` usage
 ```dart
   final animation = DoubleAnimationProperty<AppState>(
     keyEvaluator: (key, sourceState) {
-      if( key == "LEFT" ){
+      if( key == "NODE_1" ){
         return -100;
-      } else if( key == "CENTER" ){
+      } else if( key == "NODE_2" ){
         return 0;
-      } else if( key == "RIGHT" ){
+      } else if( key == "NODE_3" ){
         return 100;
       }
     }
   ).getAnimation(stateMachine.output);
 ```
 
+##### Custom `AnimationProperty` usage
+```dart
+  final animation = AnimationProperty<double, AppState>(
+    // initialValue: ..., // to provide the default value of a property it couldn't be evaluated.
+    // evaluateKeyframes: ..., // to override the default keyframes of a transition
+    // tween: ..., // the tween instance to be used during interpolation
+    // defaultCurve: .. //
+    // evaluateCurve: .. //
+    keyEvaluator: (key, sourceState) {
+      if( key == "NODE_1" ){
+        return -100;
+      } else if( key == "NODE_2" ){
+        return 0;
+      }
+    }
+  ).getAnimation(stateMachine.output);
+```
+
+To receive an animation stream, the `getAnimation` method of an animation property definition should be called with a state machine stream. 
+
+Returned stream of the type `AnimationPropertyState<T>` will contain the following information: 
+* value
+* direction
 * velocity
 * time
 
 ### Animation Container Usage
 
+When a state machine is meant to govern an element represented by multiple properties, which is the case for most complex animations, you should use `AnimationContainer` and `AnimationModel` classes. 
+
+Animation containers are convenience classes that holds multiple animation properties and the common behaviour between them. 
+
+They are responsible for serialising the animation properties and the source state into the `AnimationModel` class they are related to.  
+
+They provide an output stream of the AnimationModel.
+
+Animation models are simple, data classes that implement a copyWith method, that lets the container know how to map the animation properties to its fields.
+
+##### `AnimationContainer` and `AnimationModel` usage
 ```dart
 
 class AwesomeObjectAnimation extends AnimationContainer<AwesomeSourceState, AwesomeObject> {
 
-  RegularCardAnimation(AwesomeObjectStateMachine stateMachine) : super(
+  AwesomeObjectAnimation(AwesomeObjectStateMachine stateMachine) : super(
     stateMachine: stateMachine,
     initial: AwesomeObject.empty(),
     defaultCurve: Curves.easeInOutQuad,
@@ -409,4 +446,34 @@ class AwesomeObject extends AnimationModel {
 
 }
 
+```
+### Rendering the Animation with BehaviorSubjectBuilder
+
+BehaviorSubjectBuilder is a simple extension of the StreamBuilder widget that exists for convenience.
+
+```dart
+class ExampleWidget extends StatelessWidget {
+  const ExampleWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BehaviorSubjectBuilder(
+      subject: context.read<AwesomeObjectAnimation>(),
+      subjectBuilder: (context, awesomeObject) => Container(
+       /*.... */ 
+      )
+    );
+  }
+}
+```
+
+### Subscribing Callbacks to Animation Events
+
+```dart
+  // ...
+  final ExampleAFSM stateMachine = ExampleAFSM(stateSubject, tickerManager); 
+  //...
+  stateMachine.output.firstWhere((state) => state?.state.fromKey == "NODE_2").then((value){
+    print("ON NODE_2");
+  });
 ```
