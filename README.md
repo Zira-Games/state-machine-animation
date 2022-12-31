@@ -16,9 +16,7 @@ Therefor, delay the need for animation runtimes until you need features like ani
 
 ## Features
 
-* Property evaluation through:
-  * keyframes & interpolation,
-  * custom business logic.
+* Keyframe evaluation & interpolation,
 * Duration and Curve evaluation that can be provided with default values and functional evaluation for variety of hierarchical levels of the animation definition,
 * Animation model containers that handles multiple animations properties for a specific entity.
 * Reactive approach to ensuring continuity that can handle transitions being layered overed each other, with concurrency options different transition reaction types to changing app state.
@@ -237,6 +235,12 @@ Use cases are as follows:
 
 * Named `SelfTransition` (With Custom Keyframes)
 
+```dart
+  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    executeSelfTransition(SelfTransition("LOOPING", [AnimationKeyframe(Idle("MID-POINT"), 0.5)]));
+  }
+```
 
 * Jump to a named `InTransition` State
 
@@ -327,6 +331,15 @@ Returned stream of the type `AnimationPropertyState<T>` will contain the followi
 * direction
 * velocity
 * time
+
+Current existing extensions of `AnimationProperty` class is as follows:
+* IntegerAnimationProperty
+* DoubleAnimationProperty
+* ModdedDoubleAnimationProperty
+* SizeAnimationProperty
+* ColorAnimationProperty
+* BoolAnimationProperty
+* StringAnimationProperty
 
 ### Animation Container Usage
 

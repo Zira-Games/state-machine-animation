@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Added documentation.
+
 ## 1.0.2
 
 - Some concepts renamed for better consistency.
