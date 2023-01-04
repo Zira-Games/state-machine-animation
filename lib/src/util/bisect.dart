@@ -3,7 +3,6 @@
 library bisect;
 
 extension Bisect<E> on List<E> {
-
   /// Inserts an [element] to a sorted [list] while keeping it sorted,
   /// assuming this [list] is already sorted.
   ///
@@ -14,8 +13,14 @@ extension Bisect<E> on List<E> {
   ///
   /// Equivalent to:
   /// `list.insert(list.bisectRight(element), element)`
-  void insortRight(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) {
-    final low = bisectRight(element, compareOptional: compareOptional, lowOptional: lowOptional, highOptional: highOptional);
+  void insortRight(E element,
+      {int Function(E, E)? compareOptional,
+      int? lowOptional,
+      int? highOptional}) {
+    final low = bisectRight(element,
+        compareOptional: compareOptional,
+        lowOptional: lowOptional,
+        highOptional: highOptional);
     insert(low, element);
   }
 
@@ -32,7 +37,10 @@ extension Bisect<E> on List<E> {
   ///
   /// Two optional parameters [low] (`0` by default) and [high] (`list.length` by default)
   /// can be provided to bisect only an slice of this list where the element will be inserted.
-  int bisectRight(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) {
+  int bisectRight(E element,
+      {int Function(E, E)? compareOptional,
+      int? lowOptional,
+      int? highOptional}) {
     final compare = compareOptional ?? Comparable.compare as Function(E, E);
     var low = lowOptional ?? 0;
     var high = highOptional ?? length;
@@ -74,8 +82,14 @@ extension Bisect<E> on List<E> {
   ///
   /// Equivalent to:
   /// `list.insert(list.bisectLeft(element), element)`
-  void insortLeft(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) {
-    final low = bisectLeft(element, compareOptional: compareOptional, lowOptional: lowOptional, highOptional: highOptional);
+  void insortLeft(E element,
+      {int Function(E, E)? compareOptional,
+      int? lowOptional,
+      int? highOptional}) {
+    final low = bisectLeft(element,
+        compareOptional: compareOptional,
+        lowOptional: lowOptional,
+        highOptional: highOptional);
     insert(low, element);
   }
 
@@ -92,7 +106,10 @@ extension Bisect<E> on List<E> {
   ///
   /// Two optional parameters [low] (`0` by default) and [high] (`list.length` by default)
   /// can be provided to bisect only an slice of this list where the element will be inserted.
-  int bisectLeft(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) {
+  int bisectLeft(E element,
+      {int Function(E, E)? compareOptional,
+      int? lowOptional,
+      int? highOptional}) {
     final compare = compareOptional ?? Comparable.compare as Function(E, E);
     var low = lowOptional ?? 0;
     var high = highOptional ?? length;
@@ -119,11 +136,23 @@ extension Bisect<E> on List<E> {
   // Aliases
 
   /// Just and alias for [bisectRight].
-  int bisect(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) =>
-      bisectRight(element, compareOptional: compareOptional, lowOptional: lowOptional, highOptional: highOptional);
+  int bisect(E element,
+          {int Function(E, E)? compareOptional,
+          int? lowOptional,
+          int? highOptional}) =>
+      bisectRight(element,
+          compareOptional: compareOptional,
+          lowOptional: lowOptional,
+          highOptional: highOptional);
 
   /// Just an alias for [insortRight].
-  void insort(E element, {int Function(E, E)? compareOptional, int? lowOptional, int? highOptional}) {
-    insortRight(element, compareOptional: compareOptional, lowOptional: lowOptional, highOptional: highOptional);
+  void insort(E element,
+      {int Function(E, E)? compareOptional,
+      int? lowOptional,
+      int? highOptional}) {
+    insortRight(element,
+        compareOptional: compareOptional,
+        lowOptional: lowOptional,
+        highOptional: highOptional);
   }
 }

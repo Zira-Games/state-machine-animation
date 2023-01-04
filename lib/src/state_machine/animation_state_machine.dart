@@ -10,6 +10,7 @@ typedef IdleOnFilter = bool Function(String key);
 
 // TODO maybe instead of a stream output, use extends Animation<T> with AnimationEagerListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin so that it's in line with regular AnimationController
 // TODO maybe instead of an abstract class with inheritance, do it with composition and declaratively
+/// Handles the state machine state according to hooks implemented by its extension classes. 
 abstract class AnimationStateMachine<S> {
 
   final TickerManager tickerManager;

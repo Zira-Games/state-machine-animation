@@ -15,36 +15,45 @@ typedef ContainerSerializer<S> = Map<String, dynamic> Function(S state);
 // TODO https://github.com/flutter/engine/pull/16175
 // TODO https://github.com/flutter/flutter/issues/75540
 // TODO https://github.com/flutter/flutter/issues/93584
+/// Handles the serialization of an animation state machine instance to a data model, according to multiple animation properties it can contain
 class AnimationContainer<S, M extends AnimationModel> {
-
   final AnimationStateMachine<S> stateMachine;
   late final List<AnimationProperty<dynamic, S>> properties;
   late final List<PropertyAnimation> _animations;
 
   final flutter_animation.Curve? defaultCurve;
   final CurveEvaluator<S>? _evaluateCurve;
-  CurveEvaluator<S> get evaluateCurve => _evaluateCurve ?? (Transition transition) => defaultCurve;
+  CurveEvaluator<S> get evaluateCurve =>
+      _evaluateCurve ?? (Transition transition) => defaultCurve;
 
   final ContainerSerializer<S>? staticPropertySerializer;
 
   final M initial;
   late BehaviorSubject<M> output;
 
-  AnimationContainer({ required this.stateMachine, required this.initial, this.staticPropertySerializer, required this.properties, this.defaultCurve, CurveEvaluator<S>? evaluateCurve, bool sync = false })
+  AnimationContainer(
+      {required this.stateMachine,
+      required this.initial,
+      this.staticPropertySerializer,
+      required this.properties,
+      this.defaultCurve,
+      CurveEvaluator<S>? evaluateCurve,
+      bool sync = false})
       : _evaluateCurve = evaluateCurve {
     _animations = properties.map((p) => p.copyWith(container: this).getAnimation(stateMachine.output.stream)).toList();
     output = BehaviorSubject.seeded(initial, sync: sync);
-    output.addStream(Rx.zip<AnimationPropertyState, M>(_animations, _animationZipper));
+    output.addStream(
+        Rx.zip<AnimationPropertyState, M>(_animations, _animationZipper));
   }
 
-  M _animationZipper(values){
-    try{
+  M _animationZipper(values) {
+    try {
       return initial.copyWith(mergeMap<String, dynamic>([
         _serializeContainer(stateMachine.output.value),
-        for( var i = 0; i < values.length; i++ )
+        for (var i = 0; i < values.length; i++)
           properties[i].serializer(values[i])
       ])) as M;
-    } catch (e,s) {
+    } catch (e, s) {
       if (kDebugMode) {
         print("$e,$s");
       }
@@ -52,8 +61,8 @@ class AnimationContainer<S, M extends AnimationModel> {
     }
   }
 
-  Map<String, dynamic> _serializeContainer(AnimationStateMachineValue<S>? machineState) {
-    if( machineState != null && staticPropertySerializer != null ){
+  Map<String, dynamic> _serializeContainer( AnimationStateMachineValue<S>? machineState) {
+    if (machineState != null && staticPropertySerializer != null) {
       return staticPropertySerializer!(machineState.sourceState);
     } else {
       return <String, dynamic>{};
@@ -67,5 +76,4 @@ class AnimationContainer<S, M extends AnimationModel> {
     await output.drain();
     output.close();
   }
-
 }

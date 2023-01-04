@@ -1,6 +1,6 @@
 name: state_machine_animation
 description: State-machine driven animation controller and evaluation library based on streams.
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/Zira-Games/state-machine-animation
 homepage: https://github.com/Zira-Games/state-machine-animation
 
@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   rxdart: ^0.27.5
   equatable: ^2.0.5
+  meta: ^1.8.0
   belatuk_merge_map: ^4.0.0
   memoized: ^1.5.0
   clock: ^1.1.1

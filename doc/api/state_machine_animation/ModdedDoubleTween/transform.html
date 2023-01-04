@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the transform method from the ModdedDoubleTween class, for the Dart programming language.">
+  <title>transform method - ModdedDoubleTween class - state_machine_animation library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">state_machine_animation</a></li>
+    <li><a href="../../state_machine_animation/state_machine_animation-library.html">state_machine_animation</a></li>
+    <li><a href="../../state_machine_animation/ModdedDoubleTween-class.html">ModdedDoubleTween</a></li>
+    <li class="self-crumb">transform method</li>
+  </ol>
+  <div class="self-name">transform</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">transform</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<div>
+  <ol class="annotation-list">
+    <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+  </ol>
+</div>
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+<span class="name ">transform</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="transform-param-t"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">t</span></span></li>
+</ol>)
+
+      <div class="features">override</div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Returns the interpolated value for the current value of the given animation.</p>
+<p>This method returns <code>begin</code> and <code>end</code> when the animation values are 0.0 or
+1.0, respectively.</p>
+<p>This function is implemented by deferring to <a href="https://api.flutter.dev/flutter/animation/Tween/lerp.html">lerp</a>. Subclasses that want
+to provide custom behavior should override <a href="https://api.flutter.dev/flutter/animation/Tween/lerp.html">lerp</a>, not <a href="../../state_machine_animation/ModdedDoubleTween/transform.html">transform</a> (nor
+<a href="https://api.flutter.dev/flutter/animation/Animatable/evaluate.html">evaluate</a>).</p>
+<p>See the constructor for details about whether the <a href="https://api.flutter.dev/flutter/animation/Tween/begin.html">begin</a> and <a href="https://api.flutter.dev/flutter/animation/Tween/end.html">end</a>
+properties may be null when this is called. It varies from subclass to
+subclass.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+transform(double t) {
+  final difference = (end ?? 0) - (begin ?? 0);
+  if (difference != mod) {
+    if (difference &gt; (mod &#47; 2)) {
+      end = (end ?? 0) - mod;
+    } else if (-difference &gt; (mod &#47; 2)) {
+      end = (end ?? 0) + mod;
+    }
+  }
+  return super.transform(t) % mod;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">state_machine_animation</a></li>
+  <li><a href="../../state_machine_animation/state_machine_animation-library.html">state_machine_animation</a></li>
+  <li><a href="../../state_machine_animation/ModdedDoubleTween-class.html">ModdedDoubleTween</a></li>
+  <li class="self-crumb">transform method</li>
+</ol>
+
+
+    <h5>ModdedDoubleTween class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../state_machine_animation/ModdedDoubleTween-class.html#constructors">Constructors</a></li>
+          <li><a href="../../state_machine_animation/ModdedDoubleTween/ModdedDoubleTween.html">ModdedDoubleTween</a></li>
+
+
+    <li class="section-title">
+      <a href="../../state_machine_animation/ModdedDoubleTween-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Tween/begin.html">begin</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Tween/end.html">end</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li><a href="../../state_machine_animation/ModdedDoubleTween/mod.html">mod</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title"><a href="../../state_machine_animation/ModdedDoubleTween-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Animatable/animate.html">animate</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Animatable/chain.html">chain</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Animatable/evaluate.html">evaluate</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Tween/lerp.html">lerp</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/animation/Tween/toString.html">toString</a></li>
+    <li><a href="../../state_machine_animation/ModdedDoubleTween/transform.html">transform</a></li>
+
+    <li class="section-title inherited"><a href="../../state_machine_animation/ModdedDoubleTween-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    state_machine_animation
+      1.0.3
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

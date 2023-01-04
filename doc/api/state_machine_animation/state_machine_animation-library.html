@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="state_machine_animation library API docs, for the Dart programming language.">
+  <title>state_machine_animation library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">state_machine_animation</a></li>
+    <li class="self-crumb">state_machine_animation library</li>
+  </ol>
+  <div class="self-name">state_machine_animation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-library">state_machine_animation</span> library 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Support for doing something awesome.</p>
+<p>More dartdocs go here.</p>
+</section>
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="AnimationContainer">
+  <span class="name "><a href="../state_machine_animation/AnimationContainer-class.html">AnimationContainer</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>, <span class="type-parameter">M extends <a href="../state_machine_animation/AnimationModel-class.html">AnimationModel</a></span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Handles the serialization of an animation state machine instance to a data model, according to multiple animation properties it can contain
+</dd>
+
+        <dt id="AnimationKeyframe">
+  <span class="name "><a href="../state_machine_animation/AnimationKeyframe-class.html">AnimationKeyframe</a></span> 
+
+</dt>
+<dd>
+  Represents a set animation state that can be at a certain point of a given transition.
+</dd>
+
+        <dt id="AnimationModel">
+  <span class="name "><a href="../state_machine_animation/AnimationModel-class.html">AnimationModel</a></span> 
+
+</dt>
+<dd>
+  Represents a data class that knows how to map itself to named animation properties through its copyWith method
+</dd>
+
+        <dt id="AnimationProperty">
+  <span class="name "><a href="../state_machine_animation/AnimationProperty-class.html">AnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">T extends dynamic</span>, <span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Handles the evaluation of a single property given an animation state machine instance
+</dd>
+
+        <dt id="AnimationPropertyMoment">
+  <span class="name "><a href="../state_machine_animation/AnimationPropertyMoment-class.html">AnimationPropertyMoment</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="AnimationPropertyState">
+  <span class="name "><a href="../state_machine_animation/AnimationPropertyState-class.html">AnimationPropertyState</a><span class="signature">&lt;<wbr><span class="type-parameter">T extends dynamic</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Contains the necessary state of the output stream of an animation property instance.
+</dd>
+
+        <dt id="AnimationState">
+  <span class="name "><a href="../state_machine_animation/AnimationState-class.html">AnimationState</a></span> 
+
+</dt>
+<dd>
+  Represents the necessary state of an animation state machine instance.
+</dd>
+
+        <dt id="AnimationStateMachine">
+  <span class="name "><a href="../state_machine_animation/AnimationStateMachine-class.html">AnimationStateMachine</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Handles the state machine state according to hooks implemented by its extension classes.
+</dd>
+
+        <dt id="AnimationStateMachineConfig">
+  <span class="name "><a href="../state_machine_animation/AnimationStateMachineConfig-class.html">AnimationStateMachineConfig</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Contains the necessary configuration within the value of the output stream of an animation state machine instance.
+</dd>
+
+        <dt id="AnimationStateMachineValue">
+  <span class="name "><a href="../state_machine_animation/AnimationStateMachineValue-class.html">AnimationStateMachineValue</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Contains the necessary state of the output stream of an animation state machine instance.
+</dd>
+
+        <dt id="BehaviorSubjectBuilder">
+  <span class="name "><a href="../state_machine_animation/BehaviorSubjectBuilder-class.html">BehaviorSubjectBuilder</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Renders the state of subject according to a given builder
+</dd>
+
+        <dt id="BoolAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/BoolAnimationProperty-class.html">BoolAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for Bool values.
+</dd>
+
+        <dt id="ColorAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/ColorAnimationProperty-class.html">ColorAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for Color values.
+</dd>
+
+        <dt id="DoubleAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/DoubleAnimationProperty-class.html">DoubleAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for Double values.
+</dd>
+
+        <dt id="Idle">
+  <span class="name "><a href="../state_machine_animation/Idle-class.html">Idle</a></span> 
+
+</dt>
+<dd>
+  Represents and idle state of an animation state machine instance.
+</dd>
+
+        <dt id="IntegerAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/IntegerAnimationProperty-class.html">IntegerAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for Integer values.
+</dd>
+
+        <dt id="InTransition">
+  <span class="name "><a href="../state_machine_animation/InTransition-class.html">InTransition</a></span> 
+
+</dt>
+<dd>
+  Represents an in-between state of two idles states of an animation state machine instance.
+</dd>
+
+        <dt id="ModdedDoubleAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/ModdedDoubleAnimationProperty-class.html">ModdedDoubleAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  An implementation of animation property for Double values, that interpolates between key values in a circular manner.
+</dd>
+
+        <dt id="ModdedDoubleTween">
+  <span class="name "><a href="../state_machine_animation/ModdedDoubleTween-class.html">ModdedDoubleTween</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="SelfTransition">
+  <span class="name "><a href="../state_machine_animation/SelfTransition-class.html">SelfTransition</a></span> 
+
+</dt>
+<dd>
+  Defines a state machine transition starts ends on the same idle state.
+</dd>
+
+        <dt id="SizeAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/SizeAnimationProperty-class.html">SizeAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for Size values.
+</dd>
+
+        <dt id="StringAnimationProperty">
+  <span class="name "><a href="../state_machine_animation/StringAnimationProperty-class.html">StringAnimationProperty</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A default implementation of animation property for String values.
+</dd>
+
+        <dt id="TickerManager">
+  <span class="name "><a href="../state_machine_animation/TickerManager-class.html">TickerManager</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="Transition">
+  <span class="name "><a href="../state_machine_animation/Transition-class.html">Transition</a></span> 
+
+</dt>
+<dd>
+  Defines a way a transition between two idles state can occur.
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+
+    <section class="summary offset-anchor" id="functions">
+      <h2>Functions</h2>
+
+      <dl class="callables">
+        <dt id="combineSubject2" class="callable">
+  <span class="name"><a href="../state_machine_animation/combineSubject2.html">combineSubject2</a></span><span class="signature">&lt;<wbr><span class="type-parameter">A</span>, <span class="type-parameter">B</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="combineSubject2-param-subjectA"><span class="type-annotation"><a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">A</span>&gt;</span></span> <span class="parameter-name">subjectA</span>, </span><span class="parameter" id="combineSubject2-param-subjectB"><span class="type-annotation"><a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">B</span>&gt;</span></span> <span class="parameter-name">subjectB</span>, </span><span class="parameter" id="combineSubject2-param-combiner"><span class="type-annotation">T</span> <span class="parameter-name">combiner</span>(<span class="parameter" id="param-a"><span class="type-annotation">A</span> <span class="parameter-name">a</span>, </span><span class="parameter" id="param-b"><span class="type-annotation">B</span> <span class="parameter-name">b</span></span>)</span>)
+    <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="combineSubject3" class="callable">
+  <span class="name"><a href="../state_machine_animation/combineSubject3.html">combineSubject3</a></span><span class="signature">&lt;<wbr><span class="type-parameter">A</span>, <span class="type-parameter">B</span>, <span class="type-parameter">C</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="combineSubject3-param-streamA"><span class="type-annotation"><a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">A</span>&gt;</span></span> <span class="parameter-name">streamA</span>, </span><span class="parameter" id="combineSubject3-param-streamB"><span class="type-annotation"><a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">B</span>&gt;</span></span> <span class="parameter-name">streamB</span>, </span><span class="parameter" id="combineSubject3-param-streamC"><span class="type-annotation"><a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">C</span>&gt;</span></span> <span class="parameter-name">streamC</span>, </span><span class="parameter" id="combineSubject3-param-combiner"><span class="type-annotation">T</span> <span class="parameter-name">combiner</span>(<span class="parameter" id="param-a"><span class="type-annotation">A</span> <span class="parameter-name">a</span>, </span><span class="parameter" id="param-b"><span class="type-annotation">B</span> <span class="parameter-name">b</span>, </span><span class="parameter" id="param-c"><span class="type-annotation">C</span> <span class="parameter-name">c</span></span>)</span>)
+    <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="directionOf" class="callable">
+  <span class="name"><a href="../state_machine_animation/directionOf.html">directionOf</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="directionOf-param-previous"><span class="type-annotation">T</span> <span class="parameter-name">previous</span>, </span><span class="parameter" id="directionOf-param-current"><span class="type-annotation">T</span> <span class="parameter-name">current</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="isSubtype" class="callable">
+  <span class="name"><a href="../state_machine_animation/isSubtype.html">isSubtype</a></span><span class="signature">&lt;<wbr><span class="type-parameter">S</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="streamToSubject" class="callable">
+  <span class="name"><a href="../state_machine_animation/streamToSubject.html">streamToSubject</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="streamToSubject-param-stream"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">stream</span>, </span><span class="parameter" id="streamToSubject-param-value"><span class="type-annotation">T?</span> <span class="parameter-name">value</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="stringInterpolator" class="callable">
+  <span class="name"><a href="../state_machine_animation/stringInterpolator.html">stringInterpolator</a></span><span class="signature">(<wbr><span class="parameter" id="stringInterpolator-param-from"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">from</span>, </span><span class="parameter" id="stringInterpolator-param-to"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">to</span>, </span><span class="parameter" id="stringInterpolator-param-progress"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">progress</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+
+      <dl>
+        <dt id="PlayState">
+  <span class="name "><a href="../state_machine_animation/PlayState.html">PlayState</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="TransitionConcurrencyBehavior">
+  <span class="name "><a href="../state_machine_animation/TransitionConcurrencyBehavior.html">TransitionConcurrencyBehavior</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="typedefs">
+      <h2>Typedefs</h2>
+
+      <dl>
+          
+  <dt id="BehaviorSubjectWidgetBuilder" class="callable">
+    <span class="name"><a href="../state_machine_animation/BehaviorSubjectWidgetBuilder.html">BehaviorSubjectWidgetBuilder</a></span>&lt;<wbr><span class="type-parameter">T</span>&gt;<span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a> Function<span class="signature">(<span class="parameter" id="param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span><span class="parameter" id="param-value"><span class="type-annotation">T</span> <span class="parameter-name">value</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="ContainerSerializer" class="callable">
+    <span class="name"><a href="../state_machine_animation/ContainerSerializer.html">ContainerSerializer</a></span>&lt;<wbr><span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span> Function<span class="signature">(<span class="parameter" id="param-state"><span class="type-annotation">S</span> <span class="parameter-name">state</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="CurveEvaluator" class="callable">
+    <span class="name"><a href="../state_machine_animation/CurveEvaluator.html">CurveEvaluator</a></span>&lt;<wbr><span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/animation/Curve-class.html">Curve</a>? Function<span class="signature">(<span class="parameter" id="param-transition"><span class="type-annotation"><a href="../state_machine_animation/Transition-class.html">Transition</a></span> <span class="parameter-name">transition</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="DurationEvaluator" class="callable">
+    <span class="name"><a href="../state_machine_animation/DurationEvaluator.html">DurationEvaluator</a></span>&lt;<wbr><span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>? Function<span class="signature">(<span class="parameter" id="param-transition"><span class="type-annotation"><a href="../state_machine_animation/Transition-class.html">Transition</a></span> <span class="parameter-name">transition</span>, </span><span class="parameter" id="param-sourceState"><span class="type-annotation">S</span> <span class="parameter-name">sourceState</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="IdleOnFilter" class="callable">
+    <span class="name"><a href="../state_machine_animation/IdleOnFilter.html">IdleOnFilter</a></span><span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a> Function<span class="signature">(<span class="parameter" id="param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">key</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="InterpolatorFunction" class="callable">
+    <span class="name"><a href="../state_machine_animation/InterpolatorFunction.html">InterpolatorFunction</a></span>&lt;<wbr><span class="type-parameter">T</span>&gt;<span class="signature">
+      <span class="returntype parameter">= T Function<span class="signature">(<span class="parameter" id="param-from"><span class="type-annotation">T</span> <span class="parameter-name">from</span>, </span><span class="parameter" id="param-to"><span class="type-annotation">T</span> <span class="parameter-name">to</span>, </span><span class="parameter" id="param-progress"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">progress</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="KeyEvaluatorFunction" class="callable">
+    <span class="name"><a href="../state_machine_animation/KeyEvaluatorFunction.html">KeyEvaluatorFunction</a></span>&lt;<wbr><span class="type-parameter">T</span>, <span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= T? Function<span class="signature">(<span class="parameter" id="param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">key</span>, </span><span class="parameter" id="param-sourceState"><span class="type-annotation">S</span> <span class="parameter-name">sourceState</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="KeyframeEvaluator" class="callable">
+    <span class="name"><a href="../state_machine_animation/KeyframeEvaluator.html">KeyframeEvaluator</a></span>&lt;<wbr><span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../state_machine_animation/AnimationKeyframe-class.html">AnimationKeyframe</a></span>&gt;</span>? Function<span class="signature">(<span class="parameter" id="param-transition"><span class="type-annotation"><a href="../state_machine_animation/Transition-class.html">Transition</a></span> <span class="parameter-name">transition</span>, </span><span class="parameter" id="param-sourceState"><span class="type-annotation">S</span> <span class="parameter-name">sourceState</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="PropertyAnimation" class="">
+  <span class="name"><a href="../state_machine_animation/PropertyAnimation.html">PropertyAnimation</a></span>&lt;<wbr><span class="type-parameter">T</span>&gt;
+    = <a href="https://pub.dev/documentation/rxdart/0.27.7/rx/BehaviorSubject-class.html">BehaviorSubject</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../state_machine_animation/AnimationPropertyState-class.html">AnimationPropertyState</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>&gt;</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+
+          
+  <dt id="Serializer" class="callable">
+    <span class="name"><a href="../state_machine_animation/Serializer.html">Serializer</a></span><span class="signature">
+      <span class="returntype parameter">= <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span> Function<span class="signature">(<span class="parameter" id="param-state"><span class="type-annotation"><a href="../state_machine_animation/AnimationPropertyState-class.html">AnimationPropertyState</a></span> <span class="parameter-name">state</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+          
+  <dt id="StateEvaluator" class="callable">
+    <span class="name"><a href="../state_machine_animation/StateEvaluator.html">StateEvaluator</a></span>&lt;<wbr><span class="type-parameter">T</span>, <span class="type-parameter">S</span>&gt;<span class="signature">
+      <span class="returntype parameter">= T Function<span class="signature">(<span class="parameter" id="param-from"><span class="type-annotation"><a href="../state_machine_animation/AnimationState-class.html">AnimationState</a></span> <span class="parameter-name">from</span>, </span><span class="parameter" id="param-to"><span class="type-annotation"><a href="../state_machine_animation/AnimationState-class.html">AnimationState</a></span> <span class="parameter-name">to</span>, </span><span class="parameter" id="param-progress"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">progress</span>, </span><span class="parameter" id="param-sourceState"><span class="type-annotation">S</span> <span class="parameter-name">sourceState</span></span>)</span></span>
+    </span>
+    
+
+  </dt>
+  <dd>
+    
+    
+
+  </dd>
+
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">state_machine_animation</a></li>
+  <li class="self-crumb">state_machine_animation library</li>
+</ol>
+
+
+    <h5><span class="package-name">state_machine_animation</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="../state_machine_animation/state_machine_animation-library.html">state_machine_animation</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>state_machine_animation library</h5>
+    <ol>
+  <li class="section-title"><a href="../state_machine_animation/state_machine_animation-library.html#classes">Classes</a></li>
+  <li><a href="../state_machine_animation/AnimationContainer-class.html">AnimationContainer</a></li>
+  <li><a href="../state_machine_animation/AnimationKeyframe-class.html">AnimationKeyframe</a></li>
+  <li><a href="../state_machine_animation/AnimationModel-class.html">AnimationModel</a></li>
+  <li><a href="../state_machine_animation/AnimationProperty-class.html">AnimationProperty</a></li>
+  <li><a href="../state_machine_animation/AnimationPropertyMoment-class.html">AnimationPropertyMoment</a></li>
+  <li><a href="../state_machine_animation/AnimationPropertyState-class.html">AnimationPropertyState</a></li>
+  <li><a href="../state_machine_animation/AnimationState-class.html">AnimationState</a></li>
+  <li><a href="../state_machine_animation/AnimationStateMachine-class.html">AnimationStateMachine</a></li>
+  <li><a href="../state_machine_animation/AnimationStateMachineConfig-class.html">AnimationStateMachineConfig</a></li>
+  <li><a href="../state_machine_animation/AnimationStateMachineValue-class.html">AnimationStateMachineValue</a></li>
+  <li><a href="../state_machine_animation/BehaviorSubjectBuilder-class.html">BehaviorSubjectBuilder</a></li>
+  <li><a href="../state_machine_animation/BoolAnimationProperty-class.html">BoolAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/ColorAnimationProperty-class.html">ColorAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/DoubleAnimationProperty-class.html">DoubleAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/Idle-class.html">Idle</a></li>
+  <li><a href="../state_machine_animation/IntegerAnimationProperty-class.html">IntegerAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/InTransition-class.html">InTransition</a></li>
+  <li><a href="../state_machine_animation/ModdedDoubleAnimationProperty-class.html">ModdedDoubleAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/ModdedDoubleTween-class.html">ModdedDoubleTween</a></li>
+  <li><a href="../state_machine_animation/SelfTransition-class.html">SelfTransition</a></li>
+  <li><a href="../state_machine_animation/SizeAnimationProperty-class.html">SizeAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/StringAnimationProperty-class.html">StringAnimationProperty</a></li>
+  <li><a href="../state_machine_animation/TickerManager-class.html">TickerManager</a></li>
+  <li><a href="../state_machine_animation/Transition-class.html">Transition</a></li>
+
+
+
+
+
+  <li class="section-title"><a href="../state_machine_animation/state_machine_animation-library.html#functions">Functions</a></li>
+  <li><a href="../state_machine_animation/combineSubject2.html">combineSubject2</a></li>
+  <li><a href="../state_machine_animation/combineSubject3.html">combineSubject3</a></li>
+  <li><a href="../state_machine_animation/directionOf.html">directionOf</a></li>
+  <li><a href="../state_machine_animation/isSubtype.html">isSubtype</a></li>
+  <li><a href="../state_machine_animation/streamToSubject.html">streamToSubject</a></li>
+  <li><a href="../state_machine_animation/stringInterpolator.html">stringInterpolator</a></li>
+
+  <li class="section-title"><a href="../state_machine_animation/state_machine_animation-library.html#enums">Enums</a></li>
+  <li><a href="../state_machine_animation/PlayState.html">PlayState</a></li>
+  <li><a href="../state_machine_animation/TransitionConcurrencyBehavior.html">TransitionConcurrencyBehavior</a></li>
+
+  <li class="section-title"><a href="../state_machine_animation/state_machine_animation-library.html#typedefs">Typedefs</a></li>
+  <li><a href="../state_machine_animation/BehaviorSubjectWidgetBuilder.html">BehaviorSubjectWidgetBuilder</a></li>
+  <li><a href="../state_machine_animation/ContainerSerializer.html">ContainerSerializer</a></li>
+  <li><a href="../state_machine_animation/CurveEvaluator.html">CurveEvaluator</a></li>
+  <li><a href="../state_machine_animation/DurationEvaluator.html">DurationEvaluator</a></li>
+  <li><a href="../state_machine_animation/IdleOnFilter.html">IdleOnFilter</a></li>
+  <li><a href="../state_machine_animation/InterpolatorFunction.html">InterpolatorFunction</a></li>
+  <li><a href="../state_machine_animation/KeyEvaluatorFunction.html">KeyEvaluatorFunction</a></li>
+  <li><a href="../state_machine_animation/KeyframeEvaluator.html">KeyframeEvaluator</a></li>
+  <li><a href="../state_machine_animation/PropertyAnimation.html">PropertyAnimation</a></li>
+  <li><a href="../state_machine_animation/Serializer.html">Serializer</a></li>
+  <li><a href="../state_machine_animation/StateEvaluator.html">StateEvaluator</a></li>
+
+</ol>
+
+  </div><!--/sidebar-offcanvas-right-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    state_machine_animation
+      1.0.3
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

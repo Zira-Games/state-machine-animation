@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 6.0.0">
+  <meta name="description" content="state_machine_animation API docs, for the Dart programming language.">
+  <title>state_machine_animation - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/Zira-Games/state-machine-animation">state_machine_animation package</a></li>
+  </ol>
+  <div class="self-name">state_machine_animation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <p>State-machine driven animation controller and evaluation library based on streams for flutter.</p>
+<p>It provides reactive and entity based animation definitions, which can be in variety of states, transitions, and all possible blended states in between, through keyframe evaluation &amp; interpolation.</p>
+<h2 id="goals">Goals</h2>
+<p>State-machine animation exists to solve the problem of exponentially rising code complexity that quickly becomes impossible to handle when you're using dozens of separate animation controllers for a single element and trying to keep them in sync according to their relations.</p>
+<p>While the current best practice is to let dedicated animation runtimes like rive (flare) to take over when complexity reaches that level, you would lose among many flutter specific features, fine-grained access to how your animations should behave depending on your application state when that happens.</p>
+<p>The library aims to provide;</p>
+<ul>
+<li>the simplest possible surface API that you can achieve almost most behaviours with readability, clarity and maintainability with the exact right mix of declarative and imperative programming approaches.</li>
+<li>the simplest possible implementation that can let its users easily understand its codebase, fork the repository, and adapt it based on their unique requirements.</li>
+</ul>
+<p>Therefor, delay the need for animation runtimes until you need features like animation rigging and meshing that requires a dedicated user interfaces to implement, and limit their use to only those features.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Keyframe evaluation &amp; interpolation,</li>
+<li>Duration and Curve evaluation that can be provided with default values and functional evaluation for variety of hierarchical levels of the animation definition,</li>
+<li>Animation model containers that handles multiple animations properties for a specific entity.</li>
+<li>Reactive approach to ensuring continuity that can handle transitions being layered overed each other, with concurrency options different transition reaction types to changing app state.</li>
+</ul>
+<h2 id="getting-started">Getting started</h2>
+<p>Right now, the surface-level API is written to work well with the stream based state management techniques like BLOC.</p>
+<p>The library works with <code>BehaviorSubject</code> instances (streams that can have current values) to handle its state at all levels. So familiarity with the stream concept and their manipulation would be helpful.</p>
+<p>This said, everyone is encouraged to clone the repo and shift around some classes to use different patterns, such as the more performant and synchronous <code>ValueNotifier</code> instances flutter animation classes uses.</p>
+<h5 id="a-basic-state-machine-representation">A basic state machine representation</h5><img alt="an example state machine configuration" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 1.png">
+<h2 id="usage">Usage</h2>
+<p>It thinks in 3 different levels of streams.</p>
+<ul>
+<li>An entity state stream which is the input for the state machine. Its value need to include all the information that the animation should react to.</li>
+<li>A State-machine output stream which represents the animation controller state.</li>
+<li>An animation property or an animation model stream which evaluates the controller state that your app can use to render the animating object.</li>
+</ul>
+<p>A sample usage of all three is as follows:</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+
+  // A simple extension of the TickerProvider, that gives implementers the responsibility of managing a ticker's disposal along with its creation. 
+  final AppTickerManager tickerManager = AppTickerManager();
+  
+  // The entity state stream of the object that should be animated. 
+  // In this case, the AppState can be in one of three Position values.
+  final BehaviorSubject&lt;AppState&gt; stateSubject = BehaviorSubject&lt;AppState&gt;.seeded(AppState(Position.center));
+
+  // The State Machine Controller instance which tells the state-machine stream how to react to the changes in the entity state stream.
+  // This class represents the meat and bones of our animation definition.
+  final ExampleAFSM stateMachine = ExampleAFSM(stateSubject, tickerManager);
+
+  // The final animation stream that evaluates the state-machine controller stream. 
+  // In this case it's a single double property that we provide its value for the each keyframe of its state machine.
+  final animation = DoubleAnimationProperty&lt;AppState&gt;(
+    keyEvaluator: (key, sourceState) {
+      if( key == "LEFT" ){
+        return -100;
+      } else if( key == "CENTER" ){
+        return 0;
+      } else if( key == "RIGHT" ){
+        return 100;
+      }
+    }
+  ).getAnimation(stateMachine.output);
+
+  // The stream subscription that we use to expose the values of the animation. 
+  animation.listen((animationProperty) { 
+    print("${animationProperty.time}: ${animationProperty.value}");
+  });
+
+  // We change the the value of the input stream to center to right, so the state-machine can react and transition to some other state. 
+  stateSubject.add(AppState(Position.left));
+  
+}
+
+/**
+  Source state implementation
+ */
+enum Position {
+  left,
+  center,
+  right;
+}
+
+class AppState extends Equatable {
+
+  final Position position;
+
+  const AppState(this.position);
+
+  @override
+  List&lt;Object?&gt; get props =&gt; [position];
+
+}
+
+/**
+  State machine definition.
+  Implementing this abstract class means implementing the following 3 hook methods which gets called when the input state changes
+ */
+
+class ExampleSM extends AnimationStateMachine&lt;AppState&gt; {
+
+  ExampleAFSM(super.input, super.tickerManager);
+
+  // A readiness hook that returns bool. 
+  // If your source state has certain values that the state-machine shouldn't try to react to and evaluate, make sure to change the implementation accordingly from the following.
+  @override
+  bool isReady(state) =&gt; true;
+
+  // The configuration of your state machine based on the source state. 
+  // It should provide the starting point for a state-machine that is ready, and the durations for how long it takes to transition from one state to another.
+  @override
+  AnimationStateMachineConfig&lt;AppState&gt; getConfig(state) =&gt; const AnimationStateMachineConfig(
+    nodes: ["LEFT", "CENTER", "RIGHT"],
+    initialState: Idle("CENTER"),
+    defaultDuration: 1000
+  );
+
+  // The the most important hook where you define how your state machine should react to changes in the source state.
+  // You can jump or transition to any state, which can be nodes or specific points in a transition between two nodes.
+  @override
+  void reactToStateChanges(state, previous) {
+    transitionTo(Idle(state.position.name.toUpperCase()));
+  }
+
+}
+
+// A Basic ticker manager implementation. If you have a game loop, it should be probably the one to implement this interface.
+class AppTickerManager implements TickerManager {
+
+  final List&lt;Ticker&gt; _tickers = &lt;Ticker&gt;[];
+
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    final ticker = Ticker(onTick);
+    _tickers.add(ticker);
+    return ticker;
+  }
+
+  @override
+  void disposeTicker(Ticker ticker){
+    ticker.dispose();
+    _tickers.remove(ticker);
+  }
+
+}
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<h3 id="animationstatemachine-usage"><code>AnimationStateMachine</code> Usage</h3>
+<p><code>AnimationStateMachine</code> is an abstract class that is used through extending it.</p>
+<p>It is responsible for the handling the behaviour of the state machine according to the source state.</p>
+<ul>
+<li>The readiness check for the source state,</li>
+<li>the animation nodes,</li>
+<li>transition durations between the nodes,</li>
+<li>how the state machine should react to changing nodes,</li>
+<li>and optionally the default keyframe overrides within a transition,</li>
+</ul>
+<p>should be configured through the relevant hooks through this instance. 
+One notable exception is the curve of a transition, which is determined in the animation instance unlike the native flutter animation controllers.</p>
+<h4 id="isready-hook"><code>isReady</code> hook:</h4>
+<h4 id="getconfig-hook"><code>getConfig</code> hook:</h4>
+<h4 id="reacttostatechanges-hook"><code>reactToStateChanges</code> hook:</h4>
+<p><code>Explanation</code>
+Use cases are as follows:</p>
+<ul>
+<li>Jump to an <code>Idle</code> State</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    jumpTo(const Idle("NODE_1"));
+  }
+</code></pre><img alt="jump to representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 2a.png">
+<ul>
+<li>Default Transition to an Idle State</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    transitionTo(const Idle("NODE_2"));
+  }
+</code></pre><img alt="transition to Idle representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 2b.png">
+<ul>
+<li>Jump to a default <code>InTransition</code> State</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    jumpTo(InTransition.fromEdges(const Idle("NODE_1"), const Idle("NODE_2"), 0.5, playState: PlayState.paused));
+  }
+</code></pre><img alt="transition to InTransition paused representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 2c.png">
+<img alt="transition to InTransition playing representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 2d.png">
+<ul>
+<li>Execute a named Transition (With Custom Keyframes) to an <code>Idle</code> State</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    execute(Transition.declared(
+      identifier: "AN_AWESOME_TRANSITION",
+      from: const Idle("NODE_1"),
+      to: const Idle("NODE_2"),
+      defaultInternalKeyframes: const [
+        AnimationKeyframe(Idle("KEYFRAME_1"), 0.25),
+        AnimationKeyframe(Idle("KEYFRAME_2"), 0.50),
+        AnimationKeyframe(Idle("KEYFRAME_3"), 0.75)
+      ]
+    ));
+  }
+</code></pre>
+<ul>
+<li>Named <code>SelfTransition</code> (With Custom Keyframes)</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    executeSelfTransition(SelfTransition("LOOPING", [AnimationKeyframe(Idle("MID-POINT"), 0.5)]));
+  }
+</code></pre>
+<ul>
+<li>Jump to a named <code>InTransition</code> State</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    jumpTo(
+      InTransition(
+        Transition.declared(
+          identifier: "AN_AWESOME_TRANSITION",
+          from: const Idle("NODE_1"),
+          to: const Idle("NODE_2"),
+          defaultInternalKeyframes: const [
+            AnimationKeyframe(Idle("KEYFRAME_1"), 0.25),
+            AnimationKeyframe(Idle("KEYFRAME_2"), 0.50),
+            AnimationKeyframe(Idle("KEYFRAME_3"), 0.75)
+          ]
+        ), // named transition
+        0.4, // progress
+        playState: PlayState.paused
+      )
+    );
+  }
+</code></pre>
+<h4 id="concurrency-behaviours-when-you-transition-into-a-state-when-there-is-already-an-ongoing-transition">Concurrency behaviours when you transition into a state when there is already an ongoing transition.</h4>
+<p>When calling <code>transitionTo</code> method within the reactToStateChanges hook of an <code>AnimationStateMachine</code> instance, you have the option of providing a <code>TransitionConcurrencyBehavior</code> value.
+This will change the way the state machine will react to the transition attempt when there is already an ongoing transaction.</p>
+<p>Example:</p>
+<pre class="language-dart"><code class="language-dart">  @override
+  void reactToStateChanges(SampleSource state, SampleSource? previous) {
+    transitionTo(const Idle("NODE_1"), behavior: TransitionConcurrencyBehavior.sequence);
+    transitionTo(const Idle("NODE_2"), behavior: TransitionConcurrencyBehavior.sequence);
+  }
+</code></pre><img alt="concurrency replace representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 3a.png">
+<img alt="concurrency ignore representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 3b.png">
+<img alt="concurrency combine representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 3c.png">
+<img alt="concurrency sequence representation" src="https://raw.githubusercontent.com/Zira-Games/state-machine-animation/master/.github/images/State Machine 3d.png">
+<h3 id="animation-property-usage">Animation Property Usage</h3>
+<p>When a state machine is meant to govern a single property, you should use <code>AnimationProperty&lt;T, S&gt;</code> class or one of its extensions as a shortcut.</p>
+<p>Animation properties instances are responsible for evaluating the state machine into a resulting value through keyframes and interpolation, along with determining the curve a transition is going to be interpreted with for that property.</p>
+<h5 id="doubleanimationproperty-usage"><code>DoubleAnimationProperty</code> usage</h5>
+<pre class="language-dart"><code class="language-dart">  final animation = DoubleAnimationProperty&lt;AppState&gt;(
+    keyEvaluator: (key, sourceState) {
+      if( key == "NODE_1" ){
+        return -100;
+      } else if( key == "NODE_2" ){
+        return 0;
+      } else if( key == "NODE_3" ){
+        return 100;
+      }
+    }
+  ).getAnimation(stateMachine.output);
+</code></pre>
+<h5 id="custom-animationproperty-usage">Custom <code>AnimationProperty</code> usage</h5>
+<pre class="language-dart"><code class="language-dart">  final animation = AnimationProperty&lt;double, AppState&gt;(
+    // initialValue: ..., // to provide the default value of a property it couldn't be evaluated.
+    // evaluateKeyframes: ..., // to override the default keyframes of a transition
+    // tween: ..., // the tween instance to be used during interpolation
+    // defaultCurve: .. //
+    // evaluateCurve: .. //
+    keyEvaluator: (key, sourceState) {
+      if( key == "NODE_1" ){
+        return -100;
+      } else if( key == "NODE_2" ){
+        return 0;
+      }
+    }
+  ).getAnimation(stateMachine.output);
+</code></pre>
+<p>To receive an animation stream, the <code>getAnimation</code> method of an animation property definition should be called with a state machine stream.</p>
+<p>Returned stream of the type <code>AnimationPropertyState&lt;T&gt;</code> will contain the following information:</p>
+<ul>
+<li>value</li>
+<li>direction</li>
+<li>velocity</li>
+<li>time</li>
+</ul>
+<p>Current existing extensions of <code>AnimationProperty</code> class is as follows:</p>
+<ul>
+<li>IntegerAnimationProperty</li>
+<li>DoubleAnimationProperty</li>
+<li>ModdedDoubleAnimationProperty</li>
+<li>SizeAnimationProperty</li>
+<li>ColorAnimationProperty</li>
+<li>BoolAnimationProperty</li>
+<li>StringAnimationProperty</li>
+</ul>
+<h3 id="animation-container-usage">Animation Container Usage</h3>
+<p>When a state machine is meant to govern an element represented by multiple properties, which is the case for most complex animations, you should use <code>AnimationContainer</code> and <code>AnimationModel</code> classes.</p>
+<p>Animation containers are convenience classes that holds multiple animation properties and the common behaviour between them.</p>
+<p>They are responsible for serialising the animation properties and the source state into the <code>AnimationModel</code> class they are related to.</p>
+<p>They provide an output stream of the AnimationModel.</p>
+<p>Animation models are simple, data classes that implement a copyWith method, that lets the container know how to map the animation properties to its fields.</p>
+<h5 id="animationcontainer-and-animationmodel-usage"><code>AnimationContainer</code> and <code>AnimationModel</code> usage</h5>
+<pre class="language-dart"><code class="language-dart">
+class AwesomeObjectAnimation extends AnimationContainer&lt;AwesomeSourceState, AwesomeObject&gt; {
+
+  AwesomeObjectAnimation(AwesomeObjectStateMachine stateMachine) : super(
+    stateMachine: stateMachine,
+    initial: AwesomeObject.empty(),
+    defaultCurve: Curves.easeInOutQuad,
+    staticPropertySerializer: (state) =&gt; {
+      "name": state.name // example of a non-animated, static property within the animation model class.
+    },
+    properties: [
+      DoubleAnimationProperty(
+        name: "x",
+        keyEvaluator: (key, sourceState) {
+          if ( key == "NODE_1" ) {
+            return 0;
+          } else if ( key == "NODE_2" ) {
+            return 100;
+          }
+        }
+      ),
+      DoubleAnimationProperty(
+        name: "y",
+        evaluateCurve: (transition) =&gt; transition.from == const Idle("NODE_2") &amp;&amp; transition.to == const Idle("NODE_1") // An example of overriding curve for a property of a specific transition
+          ? Curves.bounceOut 
+          : Curves.easeInOutQuad,
+        keyEvaluator: (key, sourceState) {
+          if ( key == "NODE_1" ) {
+            return 0;
+          } else if ( key == "NODE_2" ) {
+            return 100;
+          }
+        }
+      ),
+      DoubleAnimationProperty(
+        name: "scale",
+        keyEvaluator: (key, sourceState) {
+          if ( key == "NODE_1" ) {
+            return 1;
+          } else if ( key == "NODE_2" ) {
+            return 2;
+          }
+        }
+      ),
+      DoubleAnimationProperty&lt;RegularCardState&gt;(
+        name: "opacity",
+        evaluateKeyframes: (transition, sourceState) =&gt; const [
+          AnimationKeyframe(Idle("NODE_1"), 0), 
+          AnimationKeyframe(Idle("KEYFRAME_1"), 0.2),
+          AnimationKeyframe(Idle("KEYFRAME_2"), 0.4), 
+          AnimationKeyframe(Idle("NODE_2"), 1)
+        ],
+        keyEvaluator: (key, sourceState){
+          if ( key == "NODE_1" ) {
+            return 0.5;
+          } else if ( key == "KEYFRAME_1" ) {
+            return 0.6;
+          } else if ( key == "KEYFRAME_2" ) {
+            return 0.7;
+          } else if ( key == "NODE_2" ) {
+            return 1;
+          }
+        }
+      )
+    ]
+  );
+}
+
+class AwesomeObject extends AnimationModel {
+
+  final double name;
+  final double x;
+  final double y;
+  final double scale;
+  final double opacity;
+
+  AwesomeObject(
+    this.name,
+    this.x,
+    this.y,
+    this.scale,
+    this.opacity,
+  );
+
+  AwesomeObject.empty() :
+    name = "",
+    x = 0,
+    y = 0,
+    scale = 1,
+    opacity = 1;
+
+  @override List&lt;Object?&gt; get props =&gt; [name, x, y, scale, opacity];
+
+  @override
+  AwesomeObject copyWith(Map&lt;String, dynamic&gt; valueMap) =&gt; AwesomeObject(
+    valueMap["name"] ?? name,
+    valueMap["x"] ?? x,
+    valueMap["y"] ?? y,
+    valueMap["scale"] ?? scale,
+    valueMap["opacity"] ?? opacity
+  );
+
+}
+
+</code></pre>
+<h3 id="rendering-the-animation-with-behaviorsubjectbuilder">Rendering the Animation with BehaviorSubjectBuilder</h3>
+<p>BehaviorSubjectBuilder is a simple extension of the StreamBuilder widget that exists for convenience.</p>
+<pre class="language-dart"><code class="language-dart">class ExampleWidget extends StatelessWidget {
+  const ExampleWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BehaviorSubjectBuilder(
+      subject: context.read&lt;AwesomeObjectAnimation&gt;(),
+      subjectBuilder: (context, awesomeObject) =&gt; Container(
+       /*.... */ 
+      )
+    );
+  }
+}
+</code></pre>
+<h3 id="subscribing-callbacks-to-animation-events">Subscribing Callbacks to Animation Events</h3>
+<pre class="language-dart"><code class="language-dart">  // ...
+  final ExampleAFSM stateMachine = ExampleAFSM(stateSubject, tickerManager); 
+  //...
+  stateMachine.output.firstWhere((state) =&gt; state?.state.fromKey == "NODE_2").then((value){
+    print("ON NODE_2");
+  });
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="state_machine_animation">
+  <span class="name"><a href="state_machine_animation/state_machine_animation-library.html">state_machine_animation</a></span> 
+
+</dt>
+<dd>Support for doing something awesome.
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="https://github.com/Zira-Games/state-machine-animation">state_machine_animation package</a></li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">state_machine_animation</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="state_machine_animation/state_machine_animation-library.html">state_machine_animation</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    state_machine_animation
+      1.0.3
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

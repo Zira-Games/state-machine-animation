@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/physics.dart';
 
@@ -7,6 +8,7 @@ import 'animation_keyframe.dart';
 
 typedef DurationEvaluator<S> = double? Function(Transition transition, S sourceState);
 
+/// Contains the necessary state of the output stream of an animation state machine instance.
 class AnimationStateMachineValue<S> extends Equatable {
   final S sourceState;
   final AnimationStateMachineConfig<S> config;
@@ -21,12 +23,13 @@ class AnimationStateMachineValue<S> extends Equatable {
     AnimationStateMachineConfig<S>? config,
     AnimationState? state
   }) => AnimationStateMachineValue<S>(
-    sourceState ?? this.sourceState,
-    config ?? this.config,
-    state ?? this.state
+      sourceState ?? this.sourceState,
+      config ?? this.config,
+      state ?? this.state
   );
 }
 
+/// Contains the necessary configuration within the value of the output stream of an animation state machine instance.
 class AnimationStateMachineConfig<S> extends Equatable {
   final List<String> nodes; // TODO nodes list is kinda unnecessary
   final AnimationState initialState;
@@ -38,49 +41,51 @@ class AnimationStateMachineConfig<S> extends Equatable {
   double duration(Transition transition, S sourceState) => evaluateDuration?.call(transition, sourceState) ?? defaultDuration;
 }
 
+/// Represents the necessary state of an animation state machine instance.
 abstract class AnimationState extends Equatable {
   const AnimationState();
   @override List<Object?> get props => [];
 
-  double duration<S>(S sourceState, AnimationStateMachineConfig<S> config);
-  double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal double duration<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config);
   String get fromKey;
   String get toKey;
   bool get isChanging;
 
-  AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed);
-  AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config);
-  AnimationState pause();
-  AnimationState play();
-  AnimationState reset();
-  AnimationState complete();
-  AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config);
-  AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config);
-  AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed);
+  @internal AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal AnimationState pause();
+  @internal AnimationState play();
+  @internal AnimationState reset();
+  @internal AnimationState complete();
+  @internal AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config);
+  @internal AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config);
 }
 
+/// Represents and idle state of an animation state machine instance.
 class Idle extends AnimationState {
   final String node;
   const Idle(this.node);
 
   @override List<Object?> get props => [...super.props, node];
-  @override double duration<S>(S sourceState, AnimationStateMachineConfig<S> config) => 0;
-  @override double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config) => 0;
+  @override @internal double duration<S>(S sourceState, AnimationStateMachineConfig<S> config) => 0;
+  @override @internal double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config) => 0;
 
   @override String toString() => node;
   @override String get fromKey => node;
   @override String get toKey => node;
   @override bool get isChanging => false;
 
-  @override AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) => this;
-  @override AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
-  @override AnimationState pause() => this;
-  @override AnimationState play() => this;
-  @override AnimationState reset() => this;
-  @override AnimationState complete() => this;
-  @override AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
-  @override AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
-  @override AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
+  @override @internal AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) => this;
+  @override @internal AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
+  @override @internal AnimationState pause() => this;
+  @override @internal AnimationState play() => this;
+  @override @internal AnimationState reset() => this;
+  @override @internal AnimationState complete() => this;
+  @override @internal AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
+  @override @internal AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
+  @override @internal AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config) => this;
 }
 
 enum PlayState {
@@ -89,6 +94,7 @@ enum PlayState {
   willPlayAsRootTransition;
 }
 
+/// Represents an in-between state of two idles states of an animation state machine instance.
 class InTransition extends AnimationState {
   final Transition transition;
   final double progress;
@@ -96,6 +102,7 @@ class InTransition extends AnimationState {
   bool get isPlaying => playState == PlayState.playing;
 
   @override bool operator ==(Object other) => identical(this, other) || (other is InTransition && transition == other.transition && nearEqual(progress, other.progress, 1e-3) && isPlaying == other.isPlaying);
+  @override int get hashCode => Object.hash(transition, playState, progress.toStringAsPrecision(3));
 
   InTransition.fromEdges(AnimationState from, AnimationState to, this.progress, { this.playState = PlayState.playing })
       : transition = Transition.defaultTransition(from, to);
@@ -104,30 +111,31 @@ class InTransition extends AnimationState {
 
   @override List<Object?> get props => [...super.props, transition, progress, playState];
 
-  @override double duration<S>(S sourceState, AnimationStateMachineConfig<S> config) => config.duration(transition, sourceState);
-  @override double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config) => duration(sourceState, config) * progress;
+  @override @internal double duration<S>(S sourceState, AnimationStateMachineConfig<S> config) => config.duration(transition, sourceState);
+  @override @internal double currentTime<S>(S sourceState, AnimationStateMachineConfig<S> config) => duration(sourceState, config) * progress;
   @override String toString() => "InTransition(${transition.from},${transition.to},${progress.toStringAsFixed(3)},$playState)";
   @override String get fromKey => transition.from.toString();
   @override String get toKey => transition.to.toString();
 
-  @override AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) =>
+  @override @internal AnimationState tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) =>
       InTransition(
           transition.tick(sourceState, config, elapsed),
           isPlaying ? min((elapsed / duration(sourceState, config)) + progress, 1.0) : progress,
           playState: playState
       ).checkCompletion(sourceState, config);
-  @override AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config) => InTransition(transition.reverse(), 1 - progress, playState: playState).checkInstantaneous(sourceState, config);
-  @override AnimationState pause() => InTransition(transition, progress, playState: PlayState.paused);
-  @override AnimationState play() => InTransition(transition, progress, playState: PlayState.playing);
-  @override AnimationState reset() => transition.from;
-  @override AnimationState complete() => transition.to is InTransition && (transition.to as InTransition).playState == PlayState.willPlayAsRootTransition ? transition.to.play() : transition.to;
-  @override AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config) => progress == 1 ? complete() : this;
-  @override AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) => duration(sourceState, config) == 0 ? complete() : this;
-  @override AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config) => progress == 0 ? reset() : checkCompletion(sourceState, config);
-  @override bool get isChanging => isPlaying || transition.from.isChanging || transition.to.isChanging;
+  @override @internal AnimationState reverse<S>(S sourceState, AnimationStateMachineConfig<S> config) => InTransition(transition.reverse(), 1 - progress, playState: playState).checkInstantaneous(sourceState, config);
+  @override @internal AnimationState pause() => InTransition(transition, progress, playState: PlayState.paused);
+  @override @internal AnimationState play() => InTransition(transition, progress, playState: PlayState.playing);
+  @override @internal AnimationState reset() => transition.from;
+  @override @internal AnimationState complete() => transition.to is InTransition && (transition.to as InTransition).playState == PlayState.willPlayAsRootTransition ? transition.to.play() : transition.to;
+  @override @internal AnimationState checkCompletion<S>(S sourceState, AnimationStateMachineConfig<S> config) => progress == 1 ? complete() : this;
+  @override @internal AnimationState checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) => duration(sourceState, config) == 0 ? complete() : this;
+  @override @internal AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config) => progress == 0 ? reset() : checkCompletion(sourceState, config);
+  @override @internal bool get isChanging => isPlaying || transition.from.isChanging || transition.to.isChanging;
 
 }
 
+/// Defines a way a transition between two idles state can occur.
 class Transition extends Equatable {
   final String identifier;
   final AnimationState from;
@@ -145,11 +153,11 @@ class Transition extends Equatable {
 
   @override List<Object?> get props => [identifier, from, to, defaultKeyframes];
 
-  Transition reverse() =>
+  @internal Transition reverse() =>
       Transition("(${to.toKey}:${from.fromKey})", to, from, defaultKeyframes.reversed.map((k) => AnimationKeyframe(k.keyState, 1 - k.progress)).toList());
-  Transition tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) =>
+  @internal Transition tick<S>(S sourceState, AnimationStateMachineConfig<S> config, double elapsed) =>
       Transition(identifier, from.tick(sourceState, config, elapsed), to.tick(sourceState, config, elapsed), defaultKeyframes);
-  Transition checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) =>
+  @internal Transition checkInstantaneous<S>(S sourceState, AnimationStateMachineConfig<S> config) =>
       Transition(identifier, from.checkInstantaneous(sourceState, config), to.checkInstantaneous(sourceState, config), defaultKeyframes);
 
   Transition copyWith({
@@ -166,6 +174,7 @@ class Transition extends Equatable {
 
 }
 
+/// Defines a state machine transition starts ends on the same idle state.
 class SelfTransition extends Equatable {
   final String identifier;
   final List<AnimationKeyframe> defaultInternalKeyframes;
@@ -175,8 +184,8 @@ class SelfTransition extends Equatable {
   @override List<Object?> get props => [identifier, defaultInternalKeyframes];
 
   Transition from(AnimationState from) => Transition.declared(
-    identifier: identifier,
-    from: from, to: from,
-    defaultInternalKeyframes: defaultInternalKeyframes
+      identifier: identifier,
+      from: from, to: from,
+      defaultInternalKeyframes: defaultInternalKeyframes
   );
 }

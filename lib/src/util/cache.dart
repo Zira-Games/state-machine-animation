@@ -42,9 +42,9 @@ class ExpireCache<K, V> {
 
   ExpireCache(
       {this.clock = const Clock(),
-        this.expireDuration = const Duration(seconds: 120),
-        this.sizeLimit = 100,
-        this.gcDuration = const Duration(seconds: 180)})
+      this.expireDuration = const Duration(seconds: 120),
+      this.sizeLimit = 100,
+      this.gcDuration = const Duration(seconds: 180)})
       : assert(sizeLimit > 0) {
     Timer.periodic(gcDuration, (Timer t) => _expireOutdatedEntries());
   }
@@ -99,7 +99,7 @@ class ExpireCache<K, V> {
   ///
   /// If the [key] is inflight, it will get the [Future] of that inflight key.
   /// Will invalidate the entry if it is expired.
-  V? get(K key)  {
+  V? get(K key) {
     if (_cache.containsKey(key) && isCacheEntryExpired(key)) {
       _cache.remove(key);
       return null;
@@ -110,5 +110,4 @@ class ExpireCache<K, V> {
   void clear() {
     _cache.clear();
   }
-
 }
