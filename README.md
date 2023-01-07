@@ -27,7 +27,8 @@ Right now, the surface-level API is written to work well with the stream based s
 
 The library works with `BehaviorSubject` instances (streams that can have current values) to handle its state at all levels. So familiarity with the stream concept and their manipulation would be helpful.
 
-This said, everyone is encouraged to clone the repo and shift around some classes to use different patterns, such as the more performant and synchronous `ValueNotifier` instances flutter animation classes uses.
+This said, everyone is encouraged to clone the repo and shift around some classes to use different patterns, such as using the more performant and synchronous `ValueNotifier` instances flutter animation classes uses,
+or using a more declarative approach for state machine instances instead of object inheritance.
 
 ##### A basic state machine representation
 

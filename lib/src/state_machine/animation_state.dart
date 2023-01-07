@@ -63,7 +63,7 @@ abstract class AnimationState extends Equatable {
   @internal AnimationState checkProgress<S>(S sourceState, AnimationStateMachineConfig<S> config);
 }
 
-/// Represents and idle state of an animation state machine instance.
+/// Represents an idle state of an animation state machine instance.
 class Idle extends AnimationState {
   final String node;
   const Idle(this.node);

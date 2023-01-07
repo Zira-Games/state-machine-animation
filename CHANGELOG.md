@@ -1,3 +1,7 @@
+## 1.0.5
+
+- More dart doc.
+
 ## 1.0.4
 
 - Added initial dart doc comments for classes.

@@ -10,7 +10,7 @@ typedef IdleOnFilter = bool Function(String key);
 
 // TODO maybe instead of a stream output, use extends Animation<T> with AnimationEagerListenerMixin, AnimationLocalListenersMixin, AnimationLocalStatusListenersMixin so that it's in line with regular AnimationController
 // TODO maybe instead of an abstract class with inheritance, do it with composition and declaratively
-/// Handles the state machine state according to hooks implemented by its extension classes. 
+/// Defines an animation state machine controller, according to the hooks ([reactToStateChanges], [getConfig], [isReady]) implemented by its extending classes.
 abstract class AnimationStateMachine<S> {
 
   final TickerManager tickerManager;
@@ -22,10 +22,22 @@ abstract class AnimationStateMachine<S> {
   AnimationStateMachineValue<S>? get value => output.value;
 
   int _elapsed = 0;
+  /// Determines whether the input state is ready to be evaluated for the state machine and its evaluators, for a given state of the input stream.
+  /// If the state machine will be usable for all input states, just implement it as
+  /// ```dart
+  /// @override bool isReady(WorldAssetState state) => true;
+  /// ```
   bool isReady(S state);
+  /// Resolves the configuration object for the state machine controller, for a given state of the input stream.
+  ///
+  /// A config object is responsible for determining the names of the idle states of a state machine and the time it takes transition between those, along with the initial state for a ready state machine.
   AnimationStateMachineConfig<S> getConfig(S state);
+  /// Resolves the behaviour of the state machine controller, for a given state of the input stream.
+  ///
+  /// [reactToStateChanges] is the most fundamental hook for a state machine. Implementers use should use [transitionTo], [jumpTo], [execute], and [executeSelfTransition] methods depending on the behaviour that needs to be achieved
   void reactToStateChanges(S state, S? previous);
 
+  /// Instantiates a state machine instance by providing a input entity state stream and a ticker provider.
   AnimationStateMachine(this.input, this.tickerManager, { bool sync = false }) {
     output = BehaviorSubject<AnimationStateMachineValue<S>?>.seeded(null, sync: sync);
     _ticker = tickerManager.createTicker(_onTicked);
@@ -70,6 +82,7 @@ abstract class AnimationStateMachine<S> {
     }
   }
 
+  /// Changes to state machine stream value to the given state immediately.
   jumpTo(AnimationState state) {
     if( value != null ){
       var newState = state.checkInstantaneous<S>(value!.sourceState, value!.config);
@@ -77,18 +90,26 @@ abstract class AnimationStateMachine<S> {
     }
   }
 
+  /// Transitions into state machine stream using the given custom transition.
+  ///
+  /// Custom transitions are used to provide a different way a transition can between two state can occur, with variety of internal keyframes.
   execute(Transition transition) {
     if( value != null ){
       _add(value!.copyWith(state: InTransition(transition.checkInstantaneous<S>(value!.sourceState, value!.config), 0, playState: PlayState.playing)));
     }
   }
 
+  /// Executes a looping transition from the current state, to the current state, using the internal keyframes [SelfTransition] object defines.
   executeSelfTransition(SelfTransition selfTransition) {
     if( value != null ) {
       execute(selfTransition.from(value!.state));
     }
   }
 
+  /// Transitions into state machine stream using the default transition between the current state and the given state.
+  ///
+  /// The transition duration is determined by the [AnimationStateMachineConfig] object returned by the [getConfig] hook.
+  /// The optional [behavior] parameter determines how the state machine should behave if there is already an ongoing transition.
   transitionTo(AnimationState targetState, { TransitionConcurrencyBehavior behavior = TransitionConcurrencyBehavior.replace }) {
     final current = value;
     if( current == null || current.state == targetState ) {
@@ -120,6 +141,9 @@ abstract class AnimationStateMachine<S> {
     }
   }
 
+  /// Disposes the state machine instance.
+  ///
+  /// It should be called once the state machine is not needed.
   dispose() async {
     _inputSubscription.cancel();
     _tickerChangeSubscription.cancel();

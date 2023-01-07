@@ -23,6 +23,7 @@ class AnimationContainer<S, M extends AnimationModel> {
 
   final flutter_animation.Curve? defaultCurve;
   final CurveEvaluator<S>? _evaluateCurve;
+
   CurveEvaluator<S> get evaluateCurve =>
       _evaluateCurve ?? (Transition transition) => defaultCurve;
 
@@ -40,7 +41,11 @@ class AnimationContainer<S, M extends AnimationModel> {
       CurveEvaluator<S>? evaluateCurve,
       bool sync = false})
       : _evaluateCurve = evaluateCurve {
-    _animations = properties.map((p) => p.copyWith(container: this).getAnimation(stateMachine.output.stream)).toList();
+    _animations = properties
+        .map((p) => p
+            .copyWith(container: this)
+            .getAnimation(stateMachine.output.stream))
+        .toList();
     output = BehaviorSubject.seeded(initial, sync: sync);
     output.addStream(
         Rx.zip<AnimationPropertyState, M>(_animations, _animationZipper));
@@ -61,7 +66,8 @@ class AnimationContainer<S, M extends AnimationModel> {
     }
   }
 
-  Map<String, dynamic> _serializeContainer( AnimationStateMachineValue<S>? machineState) {
+  Map<String, dynamic> _serializeContainer(
+      AnimationStateMachineValue<S>? machineState) {
     if (machineState != null && staticPropertySerializer != null) {
       return staticPropertySerializer!(machineState.sourceState);
     } else {

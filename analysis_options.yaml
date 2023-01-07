@@ -15,13 +15,13 @@ include: package:lints/recommended.yaml
 
 # Uncomment the following section to specify additional rules.
 
-# linter:
-#   rules:
-#     - camel_case_types
+linter:
+  rules:
+    lines_longer_than_80_chars: false
 
-# analyzer:
-#   exclude:
-#     - path/to/excluded/files/**
+analyzer:
+  errors:
+    lines_longer_than_80_chars: ignore
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints
